@@ -3,11 +3,15 @@ pragma solidity >=0.8.24;
 
 import { System } from "@latticexyz/world/src/System.sol";
 import { Counter } from "../codegen/index.sol";
+import { IIncrementErrors } from "./IIncrementErrors.sol";
 
 contract IncrementSystem is System {
   function increment() public returns (uint32) {
     uint32 counter = Counter.get();
     uint32 newValue = counter + 1;
+    if (newValue > 10) {
+      revert IIncrementErrors.CounterAbove10();
+    }
     Counter.set(newValue);
     return newValue;
   }
